@@ -1,28 +1,9 @@
 import './employers-list-item.css';
-import { Component } from 'react';
 
-class EmployrsListItem extends Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-            name: this.props.name,
-            salary: this.props.salary,
-            increase: false,
-            rise: false,
-        }
-    }
+const EmployrsListItem = (props) => {
 
-    onIncrease = (e) => {
-            this.setState(({increase}) => ({increase: !increase}));
-    }
 
-    onLike = () => {
-        this.setState(({rise}) => ({rise: !rise}))
-    }
-
-    render () {
-        const {name, salary, onDelete} = this.props;
-        const {increase, rise} = this.state;
+        const {name, salary, onDelete, onToggleIncrease, onToggleRise, increase, rise} = props;
 
         let classNames = 'list-group-item d-flex justify-content-between';
         if(increase) {
@@ -32,14 +13,16 @@ class EmployrsListItem extends Component {
             classNames += ' like';
         }
 
-
         return (
             <div> 
                 <li className={classNames}>
-                    <span className="list-group-item-label" onClick={this.onLike}>{name}</span> 
+                    <span className="list-group-item-label" onClick={onToggleRise}>{name}</span> 
                     <input type="text" className="list-group-item-input" defaultValue={salary + ' $'}/>
                     <div className='d-flex justify-content-center align-items-center'>
-                        <button type="button"className="btn-cookie btn-sm " onClick={this.onIncrease}>
+                        <button
+                            type="button"
+                            className="btn-cookie btn-sm "
+                            onClick={onToggleIncrease}>
                             <i className="fas fa-cookie"></i>
                         </button>
                         <button type="button"
@@ -52,8 +35,6 @@ class EmployrsListItem extends Component {
                 </li>
             </div>
         )
-    }
-
 }
 
 export default EmployrsListItem;
