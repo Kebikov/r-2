@@ -6,7 +6,9 @@ class EmployersAddForm extends Component {
         super(props);
         this.state = {
             name: '',
-            salary: ''
+            salary: '',
+            placeholderName:'Как его зовут?',
+            placeholderNum:'З/П в $?'
         }
     }
 
@@ -17,10 +19,16 @@ class EmployersAddForm extends Component {
     submitButton = (e) => {
         e.preventDefault();
         const {onAddElem} = this.props;
-        onAddElem(this.state.name, this.state.salary);
-        this.setState(() => {
-            return {name: '', salary: ''}
-        })
+        if(this.state.name.length < 3  ||  this.state.salary.length === 0) {
+            console.log('меньше трех', this.state.salary.length);
+            if(this.state.name.length < 3) this.setState(() => ({placeholderName: 'не меньше трех букв'}));
+            if(this.state.salary.length === 0) this.setState(() => ({placeholderNum: 'введите зарплату работника'}));
+        }else{
+            onAddElem(this.state.name, this.state.salary);
+            this.setState(() => {
+                return {name: '', salary: '', placeholderName:'Как его зовут?', placeholderNum:'З/П в $?'}
+            })
+        }
     }
 
 
@@ -37,13 +45,13 @@ class EmployersAddForm extends Component {
                             onChange={this.onValueChange} 
                             name='name'
                             className="form-control new-post-label"
-                            placeholder="Как его зовут?"
+                            placeholder={this.state.placeholderName}
                             value={name}/>
                         <input type="number" 
                             onChange={this.onValueChange} 
                             name='salary'
                             className="form-control new-post-label"
-                            placeholder="З/П в $?"
+                            placeholder={this.state.placeholderNum}
                             value={salary}/>
                         <button type="submit"
                                 className="btn btn-outline-light"

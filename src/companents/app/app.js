@@ -5,7 +5,7 @@ import AppInfo from '../app-info/app-info';
 import SearchPanel from '../search-panel/search-panel';
 import AppFilter from '../app-filter/app-filter';
 import EmploersList from '../employers-list/employers-list';
-import EmployersAddForm from '../employers-add-form/employers-add-form'; 
+import EmployersAddForm from '../employers-add-form/employers-add-form';
 
 import './app.css';
 
@@ -15,9 +15,9 @@ class App extends Component {
         super(props);
         this.state = {
             data: [
-                {name: 'Ira M.', salary: 1920, increase: false, id:1},
-                {name: 'Vani M.', salary: 220, increase: false, id:2},
-                {name: 'Roma K.', salary: 2020, increase: false, id:3}]
+                {name: 'Ira M.', salary: 1920, increase: false, rise: false, id:1},
+                {name: 'Vani M.', salary: 220, increase: false, rise: false, id:2},
+                {name: 'Roma K.', salary: 2020, increase: false, rise: false, id:3}]
         }
     }
 
@@ -32,7 +32,8 @@ class App extends Component {
             const obj = {
                 name: name,
                 salary: salary,
-                increase: false, 
+                increase: false,
+                rise: false,
                 id: nextId()
             }
 
@@ -47,17 +48,32 @@ class App extends Component {
     }
 
     onToggleIncrease= (id) => {
-        console.log(`Increas this ${id}`);
+        this.setState(({data}) => ({
+            data: data.map(item => {
+                if(item.id === id) return {...item, increase: !item.increase};
+                return item;
+            })
+        }));
     }
 
     onToggleRise= (id) => {
-        console.log(`Rise this ${id}`);
+        this.setState(({data}) => ({
+            data: data.map(item => {
+                if(item.id === id) return {...item, rise: !item.rise};
+                return item;
+            })
+        }));
     }
 
+
         render() {
+            const score = this.state.data.filter(item => item.increase === true);
+
             return (
                 <div className="app">
-                    <AppInfo/>
+                    <AppInfo
+                    allWorks={this.state.data.length}
+                    bonus={score.length}/>
                     <div className="search-panel">
                         <SearchPanel/>
                         <AppFilter
