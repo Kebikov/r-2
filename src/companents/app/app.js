@@ -85,6 +85,19 @@ class App extends Component {
         this.setState(() => ({filterName: name}));
     }
 
+    changeDataZp = (id, zp) => {
+        console.log('zp=',id, zp);
+        this.setState(({data}) => ({
+            data: data.map(item => {
+                if(item.id === +id) {
+                    item.salary = zp;
+                    return item;
+                }
+                return item;
+            })
+        }));
+    }
+
 
         render() {
             const score = this.state.data.filter(item => item.increase === true);
@@ -107,7 +120,8 @@ class App extends Component {
                         data={visibleData}
                         onDelete={this.deleteItem}
                         onToggleIncrease={this.onToggleIncrease}
-                        onToggleRise={this.onToggleRise}/>
+                        onToggleRise={this.onToggleRise}
+                        changeDataZp={this.changeDataZp}/>
                     <EmployersAddForm
                         onAddElem={this.addElem}/>
                 </div>
