@@ -18,7 +18,8 @@ class App extends Component {
                 {name: 'Ira M.', salary: 1920, increase: false, rise: false, id:1},
                 {name: 'Vani M.', salary: 220, increase: false, rise: false, id:2},
                 {name: 'Roma K.', salary: 2020, increase: false, rise: false, id:3}],
-                term:''
+                term:'',
+                filterName: ''
         }
     }
 
@@ -42,12 +43,6 @@ class App extends Component {
         });
     }
 
-    sortFn = () => {
-        this.setState(({data}) => {
-            return {data: data.filter(item => item.salary > 1000)}
-        })
-    }
-
     onToggleIncrease= (id) => {
         this.setState(({data}) => ({
             data: data.map(item => {
@@ -66,25 +61,35 @@ class App extends Component {
         }));
     }
 
+
     searchEmp = (items, term) => {
-        if(!term.length) {
-            return items;
-        }
-        return items.filter(item => {
-            return item.name.indexOf(term) > -1
-        })
+        if(term) return items.filter(item => {return item.name.indexOf(term) > -1});
+        return items;
         
     }
+
+    filterButton = (items, filterName) => {
+        switch(filterName) {
+            case 'zp': return items.filter(item => item.salary > 1000);
+            case 'up': return items.filter(item => item.rise);
+            default: return items;
+        }
+    }
+
 
     onUpdataSearch = (term) => {
         this.setState({term: term});
     }
 
+    setNameFilter = (name) => {
+        this.setState(() => ({filterName: name}));
+    }
+
 
         render() {
             const score = this.state.data.filter(item => item.increase === true);
-            const {data, term} = this.state;
-            const visibleData = this.searchEmp(data, term);
+            const {data, term, filterName} = this.state;
+            const visibleData = this.filterButton(this.searchEmp(data, term), filterName);
 
             return (
                 <div className="app">
@@ -95,7 +100,8 @@ class App extends Component {
                         <SearchPanel
                         onUpdataSearch={this.onUpdataSearch}/>
                         <AppFilter
-                            onSort={this.sortFn}/>
+                            allEmployers={this.allEmployers}
+                            setNameFilter={this.setNameFilter}/>
                     </div>
                     <EmploersList
                         data={visibleData}
